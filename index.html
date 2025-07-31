@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OtakuTrack - Anime, Manga & Manhwa Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only sr-only-focusable">Skip to main content</a>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark mb-4 fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-star me-2"></i>OtakuTrack
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" aria-current="page">
+                            <i class="fas fa-home" aria-hidden="true"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#my-list">
+                            <i class="fas fa-list" aria-hidden="true"></i> My List
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#trending">
+                            <i class="fas fa-fire" aria-hidden="true"></i> Trending
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#community">
+                            <i class="fas fa-users" aria-hidden="true"></i> Community
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex position-relative search-container">
+                    <div class="input-group">
+                        <input class="form-control search-input" type="search" placeholder="Search anime..." id="searchInput" aria-label="Search anime">
+                        <button class="btn btn-search" type="button" id="searchButton" aria-label="Search">
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="search-results" id="searchResults" role="listbox" aria-labelledby="searchInput"></div>
+                </div>
+                <ul class="navbar-nav ms-3">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle user-menu" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle" aria-hidden="true"></i> Profile
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Account</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i>Statistics</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Floating Action Button -->
+    <div class="fab" id="quickAddBtn" title="Quick Add" data-bs-toggle="tooltip" data-bs-placement="left">
+        <i class="fas fa-plus"></i>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification-container" id="notificationContainer"></div>
+
+    <main id="main-content" class="container-fluid" role="main">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="hero-content">
+                            <h1 class="hero-title">Track Your Anime Journey</h1>
+                            <p class="hero-subtitle">Discover, track, and connect with the anime community. Never lose track of your watching progress again.</p>
+                            <div class="hero-stats">
+                                <div class="stat-item">
+                                    <span class="stat-number" id="totalAnimeCount">0</span>
+                                    <span class="stat-label">Anime Tracked</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="totalEpisodesCount">0</span>
+                                    <span class="stat-label">Episodes Watched</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-number" id="totalHoursCount">0</span>
+                                    <span class="stat-label">Hours Watched</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="hero-image">
+                            <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&h=400&fit=crop&crop=center" alt="Anime artwork" class="img-fluid rounded-4 shadow-lg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Actions Section -->
+        <section class="quick-actions-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="quick-action-card" data-action="add-anime">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h3>Add Anime</h3>
+                            <p>Start tracking a new anime series</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quick-action-card" data-action="discover">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-compass"></i>
+                            </div>
+                            <h3>Discover</h3>
+                            <p>Find new anime to watch</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quick-action-card" data-action="trending">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-fire"></i>
+                            </div>
+                            <h3>Trending</h3>
+                            <p>What's popular right now</p>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="quick-action-card" data-action="random">
+                            <div class="quick-action-icon">
+                                <i class="fas fa-random"></i>
+                            </div>
+                            <h3>Random</h3>
+                            <p>Get a random recommendation</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Progress Update Section -->
+        <section class="progress-section">
+            <div class="container">
+                <div class="section-header-container">
+                    <h2 class="section-title">Your Progress</h2>
+                    <button class="btn btn-primary btn-modern" id="addNewProgressBtn">
+                        <i class="fas fa-plus me-2"></i>Add New
+                    </button>
+                </div>
+                
+                <!-- Progress Filters -->
+                <div class="progress-filters mb-4">
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="watching">Watching</button>
+                        <button class="filter-btn" data-filter="completed">Completed</button>
+                        <button class="filter-btn" data-filter="on_hold">On Hold</button>
+                        <button class="filter-btn" data-filter="dropped">Dropped</button>
+                        <button class="filter-btn" data-filter="plan_to_watch">Plan to Watch</button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-btn active" data-view="grid">
+                            <i class="fas fa-th-large"></i>
+                        </button>
+                        <button class="view-btn" data-view="list">
+                            <i class="fas fa-list"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Current Progress Items -->
+                <div id="currentProgressItems" class="progress-grid">
+                    <div class="loading-container">
+                        <div class="loading-spinner-modern">
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                        </div>
+                        <p>Loading your anime list...</p>
+                    </div>
+                </div>
+                
+                <!-- Add New Progress Form -->
+                <div class="add-new-progress-modal" id="addProgressModal" style="display: none;">
+                    <div class="modal-overlay"></div>
+                    <div class="modal-content-custom">
+                        <div class="modal-header-custom">
+                            <h3>Add New Anime</h3>
+                            <button class="btn-close-custom" id="closeAddModal">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="modal-body-custom">
+                            <div class="search-section">
+                                <label for="newTitleSearch" class="form-label">Search for Anime</label>
+                                <div class="search-input-group">
+                                    <input type="text" class="form-control" placeholder="Search anime..." id="newTitleSearch" aria-label="Search for anime">
+                                    <button class="btn btn-outline-secondary" type="button" id="newTitleSearchButton">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                                <div class="search-results-modal" id="newTitleResults"></div>
+                            </div>
+                            
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="currentProgressInput" class="form-label">Current Episode</label>
+                                    <input type="number" class="form-control" min="0" value="0" id="currentProgressInput">
+                                </div>
+                                <div class="form-group">
+                                    <label for="totalProgressInput" class="form-label">Total Episodes</label>
+                                    <input type="number" class="form-control" min="1" placeholder="Unknown" id="totalProgressInput">
+                                </div>
+                                <div class="form-group">
+                                    <label for="statusSelect" class="form-label">Status</label>
+                                    <select class="form-select" id="statusSelect">
+                                        <option value="plan_to_watch" selected>Plan to Watch</option>
+                                        <option value="watching">Watching</option>
+                                        <option value="completed">Completed</option>
+                                        <option value="on_hold">On Hold</option>
+                                        <option value="dropped">Dropped</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ratingSelect" class="form-label">Rating</label>
+                                    <select class="form-select" id="ratingSelect">
+                                        <option value="">Not Rated</option>
+                                        <option value="10">10 - Masterpiece</option>
+                                        <option value="9">9 - Great</option>
+                                        <option value="8">8 - Very Good</option>
+                                        <option value="7">7 - Good</option>
+                                        <option value="6">6 - Fine</option>
+                                        <option value="5">5 - Average</option>
+                                        <option value="4">4 - Bad</option>
+                                        <option value="3">3 - Very Bad</option>
+                                        <option value="2">2 - Horrible</option>
+                                        <option value="1">1 - Appalling</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer-custom">
+                            <button class="btn btn-secondary" id="cancelAddProgressBtn">Cancel</button>
+                            <button class="btn btn-primary" id="confirmAddProgressBtn" disabled>
+                                <i class="fas fa-plus me-2"></i>Add Anime
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Trending Section -->
+        <section class="trending-section" id="trending">
+            <div class="container">
+                <h2 class="section-title">Trending Now</h2>
+                <div class="trending-tabs">
+                    <button class="tab-btn active" data-tab="today">Today</button>
+                    <button class="tab-btn" data-tab="week">This Week</button>
+                    <button class="tab-btn" data-tab="month">This Month</button>
+                </div>
+                <div class="trending-grid" id="trendingContent">
+                    <div class="loading-container">
+                        <div class="loading-spinner-modern">
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                        </div>
+                        <p>Loading trending anime...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Recommendations Section -->
+        <section class="recommendations-section">
+            <div class="container">
+                <h2 class="section-title">Recommended For You</h2>
+                <div class="recommendations-grid" id="recommendations">
+                    <div class="loading-container">
+                        <div class="loading-spinner-modern">
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                            <div class="spinner-ring"></div>
+                        </div>
+                        <p>Loading recommendations...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Upcoming Releases Section -->
+        <section class="upcoming-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <h2 class="section-title">Continue Watching</h2>
+                        <div class="continue-watching-grid" id="continue-watching">
+                            <div class="loading-container">
+                                <div class="loading-spinner-modern">
+                                    <div class="spinner-ring"></div>
+                                    <div class="spinner-ring"></div>
+                                    <div class="spinner-ring"></div>
+                                </div>
+                                <p>Loading your continue watching list...</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-4">
+                        <div class="sidebar-content">
+                            <h2 class="section-title">Upcoming Episodes</h2>
+                            <div class="upcoming-list" id="upcoming-releases">
+                                <div class="loading-container">
+                                    <div class="loading-spinner-modern">
+                                        <div class="spinner-ring"></div>
+                                        <div class="spinner-ring"></div>
+                                        <div class="spinner-ring"></div>
+                                    </div>
+                                    <p>Loading upcoming episodes...</p>
+                                </div>
+                            </div>
+                            
+                            <div class="stats-card mt-4">
+                                <h3 class="stats-title">Your Stats</h3>
+                                <div class="stats-grid">
+                                    <div class="stat-item-sidebar">
+                                        <span class="stat-number" id="anime-count">0</span>
+                                        <span class="stat-label">Anime</span>
+                                    </div>
+                                    <div class="stat-item-sidebar">
+                                        <span class="stat-number" id="episodes-watched">0</span>
+                                        <span class="stat-label">Episodes</span>
+                                    </div>
+                                    <div class="stat-item-sidebar">
+                                        <span class="stat-number" id="hours-watched">0</span>
+                                        <span class="stat-label">Hours</span>
+                                    </div>
+                                    <div class="stat-item-sidebar">
+                                        <span class="stat-number" id="average-score">0</span>
+                                        <span class="stat-label">Avg Score</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Update Progress Modal -->
+    <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="progressModalLabel">Update Progress</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <img id="modalAnimeImage" src="" alt="Anime cover" class="img-fluid rounded mb-3">
+                        </div>
+                        <div class="col-md-8">
+                            <form id="progressForm">
+                                <div class="mb-3">
+                                    <label for="mediaTitle" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="mediaTitle" readonly>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label for="currentChapter" class="form-label">Current Episode</label>
+                                        <input type="number" class="form-control" id="currentChapter" min="0">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="totalChapters" class="form-label">Total Episodes</label>
+                                        <input type="number" class="form-control" id="totalChapters" min="1" placeholder="Unknown">
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-6">
+                                        <label for="userRating" class="form-label">Your Rating</label>
+                                        <select class="form-select" id="userRating">
+                                            <option value="">Not Rated</option>
+                                            <option value="10">10 - Masterpiece</option>
+                                            <option value="9">9 - Great</option>
+                                            <option value="8">8 - Very Good</option>
+                                            <option value="7">7 - Good</option>
+                                            <option value="6">6 - Fine</option>
+                                            <option value="5">5 - Average</option>
+                                            <option value="4">4 - Bad</option>
+                                            <option value="3">3 - Very Bad</option>
+                                            <option value="2">2 - Horrible</option>
+                                            <option value="1">1 - Appalling</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="statusSelectModal" class="form-label">Status</label>
+                                        <select class="form-select" id="statusSelectModal">
+                                            <option value="watching">Watching</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="on_hold">On Hold</option>
+                                            <option value="dropped">Dropped</option>
+                                            <option value="plan_to_watch">Plan to Watch</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="progress-preview">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span>Progress</span>
+                                            <span id="progressPercentage">0%</span>
+                                        </div>
+                                        <div class="progress">
+                                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="removeAnimeBtn">
+                        <i class="fas fa-trash me-2"></i>Remove
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveProgressBtn">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <h3 class="footer-title">OtakuTrack</h3>
+                    <p class="footer-description">The ultimate anime tracking experience. Keep track of your anime journey and discover new series to watch.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Discord"><i class="fab fa-discord"></i></a>
+                        <a href="#" aria-label="Reddit"><i class="fab fa-reddit"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <h4 class="footer-subtitle">Features</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Track Progress</a></li>
+                        <li><a href="#">Discover Anime</a></li>
+                        <li><a href="#">Statistics</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h4 class="footer-subtitle">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">API Docs</a></li>
+                        <li><a href="#">Bug Reports</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h4 class="footer-subtitle">Legal</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">DMCA</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2">
+                    <h4 class="footer-subtitle">Connect</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">Newsletter</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Community</a></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="footer-divider">
+            <div class="footer-bottom">
+                <p>&copy; 2023 OtakuTrack. All rights reserved. Powered by <a href="https://hianime.to" target="_blank">HiAnime</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
